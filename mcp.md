@@ -1,6 +1,7 @@
 # The Technical Q&A tool server (MCP)
 
-This is the part of the project I get asked about most, so it gets its own page.
+The part of the Power BI Documentation Agent I get asked about most, so it gets its own
+page.
 
 ![Technical Q&A tool server architecture](diagrams/03-mcp-tool-server.svg)
 
@@ -113,12 +114,12 @@ about a Power BI report. Only this server and the extracted evidence are.
 ## What I learned building it
 
 **Verify against the artifact people actually run.** The elegant instruction would have
-been "the Skill already ships the server, just point your editor at it." I checked the
-released bundle instead of assuming, and found its trimmed runtime is missing a
-dependency the server needs — it falls back rather than starting a real tool server. The
-elegant instruction would have produced a broken connection indicator for every person
-who followed it, and I'd have been debugging it remotely after leaving. The documented
-path uses a source-repository environment for Q&A while generation stays on the Skill.
+been "the Skill already ships the server, just point your editor at it." I tested the
+released bundle instead of assuming, and found a packaging gap that stopped the server
+from starting properly. The elegant instruction would have produced a broken connection
+indicator for every person who followed it, and I'd have been debugging it remotely
+afterwards. The documented path gives Q&A its own verified environment while generation
+stays on the Skill.
 
 **Configuration is where cross-platform bites you.** Nearly every setup failure was a
 path problem, not a logic problem. A config copied from a macOS example points at a

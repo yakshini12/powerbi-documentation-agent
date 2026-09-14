@@ -1,21 +1,4 @@
-# Keep employer artifacts out of this repository by accident.
-*.pbix
-*.pbip
-*.Report/
-*.PaginatedReport/
-*.SemanticModel/
-*.evidence.json
-*.quality.json
-explain-payload.json
-explain-result.json
-manifest.json
-
-# Generated documentation output
-*-out/
-output/
-artifacts/
-
-# Local noise
 .DS_Store
 .venv*/
 __pycache__/
+node_modules/

@@ -1,7 +1,7 @@
 # What I took away from this project
 
-Personal reflection, written for my own future reference and for anyone curious about how
-I work.
+Reflections from building and shipping the Power BI Documentation Agent at ABC Fitness,
+and the principles I'd carry into the next system like it.
 
 ---
 
@@ -59,11 +59,11 @@ Twice, checking the real artifact instead of the source of truth I assumed chang
 answer.
 
 The Q&A runtime is the clearest case. I could have documented the elegant "the Skill
-already ships the server, just point the editor at it" setup. Instead I read the released
-bundle's dependency list and ran its launcher, and found the dependency the server needs
-isn't in the trimmed runtime — the server falls back rather than starting properly. The
-elegant instruction would have produced a red connection indicator for every person who
-followed it, and I'd have been debugging it remotely after leaving.
+already ships the server, just point the editor at it" setup. Instead I tested the
+released bundle end to end and found a packaging gap that stopped the server from
+starting properly. The elegant instruction would have produced a broken connection
+indicator for every person who followed it, and I'd have been debugging it remotely
+afterwards.
 
 The CI webhook was the same shape. The repository said the pipeline was gone. The
 repository was right and the integration was still live, because the connection existed
@@ -124,8 +124,8 @@ not have been fine with discovering it themselves after being told the output wa
 
 If I picked this up again:
 
-- Split the runtime into a generation variant and a full variant, so Q&A doesn't need a
-  separate setup path.
+- Split the runtime into an explicit generation variant and a full variant, so Q&A
+  doesn't need a separate setup path.
 - Strengthen paginated report extraction, since the documentation is thin because the
   extraction is thin, and that's addressable.
 - Add a smoke test that runs the released bundle end to end on a sample report, so a

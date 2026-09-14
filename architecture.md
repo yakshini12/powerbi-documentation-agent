@@ -1,7 +1,7 @@
 # Architecture
 
-My own description of how the documentation agent is put together and why the pieces sit
-where they do. No employer source code is reproduced here.
+How the Power BI Documentation Agent is put together, and why the pieces sit where they
+do.
 
 ---
 
