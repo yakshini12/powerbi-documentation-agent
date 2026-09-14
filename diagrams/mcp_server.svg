@@ -11,7 +11,7 @@
   <rect width="1060" height="820" fill="#ffffff"/>
 
   <text x="40" y="48" font-size="26" font-weight="600" fill="#1f2328">Technical Q&amp;A tool server (MCP)</text>
-  <text x="40" y="76" font-size="15" fill="#57606a">Read-only, evidence-grounded answers about a report, exposed to the editor over stdio.</text>
+  <text x="40" y="76" font-size="15" fill="#57606a">Answers about a report, grounded in the extraction, exposed to the editor over stdio.</text>
 
   <!-- Editor -->
   <rect x="40" y="110" width="290" height="120" rx="10" fill="#f4f6f8" stroke="#c8d0d8" stroke-width="1.5"/>
@@ -39,8 +39,8 @@
   <text x="850" y="186" font-size="13.5" fill="#57606a">documents render from.</text>
   <text x="850" y="212" font-size="13" fill="#1a7f37">One extraction, many readers.</text>
 
-  <!-- Read-only tools heading -->
-  <text x="40" y="290" font-size="17" font-weight="600" fill="#1f2328">Read-only tools, grouped by question</text>
+  <!-- Tools heading -->
+  <text x="40" y="290" font-size="17" font-weight="600" fill="#1f2328">Tools that only read, grouped by question</text>
   <text x="40" y="314" font-size="13.5" fill="#57606a">Narrow by design: answering "what filters are on this page" never requires returning a whole lineage graph.</text>
 
   <!-- Group 1 -->
@@ -81,7 +81,7 @@
 
   <rect x="40" y="614" width="646" height="166" rx="10" fill="#f6fdf8" stroke="#1a7f37" stroke-width="1.5"/>
   <text x="60" y="644" font-size="14.5" font-weight="600" fill="#1a7f37">Allowed</text>
-  <text x="60" y="672" font-size="13.5" fill="#1f2328">Read-only queries against extracted evidence.</text>
+  <text x="60" y="672" font-size="13.5" fill="#1f2328">Queries that only read the extracted record.</text>
   <text x="60" y="696" font-size="13.5" fill="#1f2328">Targeted lineage with bounded depth, not full graphs by default.</text>
   <text x="60" y="720" font-size="13.5" fill="#1f2328">Inferred edges and unresolved hops reported as such, never as confirmed fact.</text>
   <text x="60" y="744" font-size="13.5" fill="#1f2328">Answers say "not evidenced" instead of filling a gap.</text>

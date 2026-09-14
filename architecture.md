@@ -1,161 +1,112 @@
 # Architecture
 
-How the Power BI Documentation Agent is put together, and why the pieces sit where they
-do.
+How the pieces fit together and what each stage does.
 
----
+## Three repositories
 
-## The three repositories problem
+The setup involves three repositories with different jobs, and keeping them straight was
+a recurring source of questions.
 
-The first thing that confused everyone — including, briefly, me — was that this system
-lives across three different repositories that play completely different roles. Getting
-this separation clear in people's heads was half the support burden.
+![The source repository, the Skill registry and the report repositories](diagrams/distribution.svg)
 
-```
-┌───────────────────────────────┐
-│  Source repository            │   Python product: extraction, rendering,
-│  (engineering-owned)          │   validation, publishing, tool server.
-└───────────────┬───────────────┘   Where development and review happen.
-                │
-                │  vendored + released as a versioned bundle
-                ▼
-┌───────────────────────────────┐
-│  Skill registry repository    │   The distributed artifact. What a developer
-│  (private, org-wide)          │   actually installs into their editor.
-└───────────────┬───────────────┘
-                │
-                │  installed once per machine
-                ▼
-┌───────────────────────────────┐
-│  Report repositories          │   Power BI report packages committed to Git.
-│  (BI-owned, many of them)     │   The agent runs *here* and opens PRs *here*.
-└───────────────────────────────┘
-```
+**The source repository** holds the product: extraction, rendering, validation,
+publishing and the MCP server. Development and code review happen here.
 
-The consequence that mattered operationally: **editing the source repository does not
-change what anyone's editor is running.** An installed Skill is pinned to a released
-bundle. A fix only reaches the team when it is released into the registry and they
-update. I had to explain this repeatedly, and it's also what made repository cleanup
-safe to do — deleting retired files from the source repository could not break an
-already-installed Skill.
+**The Skill registry** is private to the organisation and holds the released bundle. This
+is what a developer installs into Cursor.
 
-## Pipeline stages
+**The report repositories** hold the Power BI report packages. The agent runs inside
+these and opens its pull requests here.
 
-### 1. Discovery
+The practical effect is that editing the source repository does not change what anyone is
+running. An installed Skill stays on the released bundle until the person updates, so a
+fix reaches the team when it is released, not when it is merged. That is also why
+removing old files from the source repository could not break anyone's install.
 
-Given a repository, a branch and a report name, resolve exactly one report package.
-Zero matches or multiple matches is a hard stop, not a guess — silently documenting the
-wrong report is worse than failing.
+## Stages
 
-### 2. Deterministic extraction
+![The stages behind one invocation](diagrams/flow.svg)
 
-Parse the report package into a structured evidence model: pages, visuals and their
-field bindings, filters (distinguishing report/page/visual scope), slicers and their
-applied state, measures, and the dependency and lineage graph.
+### Discovery
 
-Two properties I cared about here:
+Given a repository, branch and report name, find exactly one report package. Zero
+matches or more than one is a stop, not a best guess, because documenting the wrong
+report is worse than failing.
 
-- **Provenance on every fact.** Each extracted item carries where it came from and a
-  confidence level. Inferred lineage is labelled inferred; unresolved hops are labelled
-  as gaps. The documentation then says so, instead of presenting a guess as a fact.
-- **Evidence is the only interface.** Everything downstream — business prose, technical
-  docs, PDFs, the Q&A server — reads this model rather than re-parsing report files.
-  One extraction, many renderers.
+### Extraction
 
-### 3. The bounded reasoning step
+Parse the report package into a structured record: pages, visuals and their field
+bindings, filters separated by report, page and visual level, slicers and their applied
+state, measures, and the dependency and lineage graph.
 
-This is the part I'd defend most in a design review.
+Two things I cared about here.
 
-Business prose is the one place a language model genuinely helps: turning structured
-facts into "here's what this report is for, here's what this KPI means, here's when to
-be careful with it." But it's also where a model will happily invent a plausible
-definition for a metric it knows nothing about.
+Every item records where it came from and how confident the extraction is. Inferred
+lineage is marked inferred and unresolved hops are recorded as gaps, so the documentation
+can say so instead of presenting a guess as fact.
 
-So the exchange is deliberately narrow:
+Everything downstream reads this record rather than parsing report files again. The
+business wording step, the technical documents, the PDF and the MCP server all work from
+the same extraction, so they cannot disagree with each other.
 
-1. A prepare step writes an **explain payload** — a curated selection of evidence — plus
-   a **manifest** carrying a hash of that payload.
-2. The reasoning step may read **only** those two files. Not the report package, not the
-   evidence JSON, not previously generated docs, not the source code, not the Q&A tool
-   server. Every statement must cite payload references.
-3. Facts absent from the payload stay absent. The instruction is to preserve the
-   ambiguity, not resolve it.
-4. The result is written back as a JSON object matching a fixed contract.
-5. The Python side re-checks the payload hash before using the result, so a response
-   authored against a different payload is rejected.
+### The model step
 
-```
-evidence ──> [prepare] ──> explain-payload.json + manifest.json (hashed)
-                                      │
-                                      ▼
-                          reasoning step (editor's model)
-                             reads ONLY those two files
-                                      │
-                                      ▼
-                            explain-result.json
-                                      │
-                          hash verified ──> deterministic render
-```
+This is the only stage a model touches.
 
-Once that JSON exists, **generation involves no model at all**. Same payload plus same
-result produces the same documents. That reproducibility is what made the output
-trustworthy enough to put in a PR.
+Turning structured facts into readable wording is genuinely useful work for a model. The
+risk is that a model given the whole report will also write confident definitions for
+measures it has no information about, and those read exactly like the correct ones.
 
-### 4. Rendering
+So the exchange is kept narrow.
 
-From approved evidence and the approved explanation:
+![What the model step can and cannot read](diagrams/boundary.svg)
 
-- business Markdown and styled HTML;
-- technical Markdown, a paginated PDF, and CSV inventories (pages, visuals, filters,
-  slicers, measures, dependencies, lineage, impact);
-- a self-contained HTML file written beside the report package, for a developer to embed
-  on a Documentation page inside the report itself.
+A prepare step writes a payload holding a selected slice of evidence, plus a manifest
+with a hash of that payload. The model reads those two files only. Not the report
+package, not the full extraction, not previously generated documents, not the product
+source, not the MCP server. Every statement has to cite payload references, and anything
+missing from the payload stays missing.
 
-That last one is a **handoff artifact**, not an automatic publish. Binding it into the
-report is a deliberate manual step, and being precise about that in the docs prevented a
-lot of false expectations.
+The reply is written back as JSON in a fixed shape, and the payload hash is checked again
+before it is used, so a reply written against a different payload is rejected.
 
-### 5. Validation
+### Rendering
 
-Before anything is published: evidence integrity checks, the payload hash check, and a
-quality report. A generation failure stops the run before the publish stage — no branch,
-no commit, no PR, nothing half-written pushed anywhere.
+From the extraction and the accepted wording, the run produces business Markdown and
+HTML, technical Markdown, a PDF and CSV inventories covering pages, visuals, filters,
+slicers, measures, dependencies, lineage and impact.
 
-### 6. Publish
+It also writes a standalone HTML file next to the report package. That file is a handoff
+for a report developer to embed on a documentation page inside the report. It does not
+change the report pages or the model, and binding it in is a deliberate manual step.
+Being clear about that in the documentation avoided a lot of wrong expectations.
 
-Create a branch, commit the artifacts, open a **draft** PR against the target branch
-using the developer's own authenticated CLI session. Their identity, their permissions,
-their review process. No service account and no bot with write access to the whole
-estate.
+### Validation
 
-## The Q&A tool server
+Before anything is published there are checks on the extraction, the payload hash check
+and a quality report. A failure stops the run before the publish stage, so there is no
+half written branch or commit anywhere.
 
-> Covered in depth in **[`mcp.md`](mcp.md)**, including the full tool list and the
-> configuration problems worth knowing about.
+### Publishing
 
-A 3,000-line technical document is a reference, not an answer. So the same evidence model
-is exposed to the editor as a read-only tool server over stdio, with narrow tools —
-report structure, report/page/visual filters, slicer state, measure dependencies,
-measure usage, source dependencies, impact analysis, lineage gaps — so a question like
-"what filters are applied on this page" doesn't require dumping an entire lineage graph
-into the conversation.
+Create a branch, commit the files and open a draft pull request against the target
+branch, using the developer's own authenticated GitHub CLI session. Their identity, their
+permissions, their review process. No service account with write access across the
+reporting repositories.
 
-Safety rules I built into how it's used:
+## The MCP server
 
-- It is **not** used during business explanation. That boundary stays sealed.
-- Lineage queries are targeted by default, with bounded depth and edge caps, instead of
-  returning the full graph.
-- The one mutating operation (extract and cache to disk) **must never be auto-invoked**.
-  A human approves it explicitly.
-- Unrelated tool servers are never accepted as evidence about a report.
+Covered in [mcp.md](mcp.md). In short, the same extraction is exposed to Cursor as a set
+of tools that only read, so a developer can ask a specific question instead of searching
+a long technical document.
 
-## Trust boundaries, summarised
+## Boundaries
 
 | Boundary | Rule |
 |---|---|
-| Business prose | Payload + manifest only. No package files, no evidence JSON, no tool server. |
-| Generation | Deterministic. No model involvement after the explanation is approved. |
-| Model | The developer's own editor model. No external API, no personal key. |
-| Writes to a report repo | Draft PR only, under the developer's own credentials. |
-| Cache/extract mutation | Human approval required, never automatic. |
-| Publishing to the BI service | Out of scope. Happens through the team's normal sync after merge. |
+| Business wording | Payload and manifest only. No report files, no full extraction, no MCP |
+| Rendering | Deterministic. No model involved once the wording is accepted |
+| Model | The developer's own editor model. No external API and no personal key |
+| Writes to a report repository | Draft pull request only, under the developer's own login |
+| The one tool that writes files | Human approval required every time |
+| Publishing to the Power BI service | Out of scope. Happens through the team's normal sync after merge |
