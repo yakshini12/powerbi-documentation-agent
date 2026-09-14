@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 620" width="1060" height="620" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="d" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="1060" height="620" fill="#ffffff"/>
+
+  <text x="40" y="48" font-size="26" font-weight="600" fill="#1f2328">Three repositories, three jobs</text>
+  <text x="40" y="76" font-size="15" fill="#57606a">The separation that caused the most confusion, and the reason cleanup was safe to do.</text>
+
+  <!-- Source repo -->
+  <rect x="40" y="112" width="290" height="180" rx="10" fill="#f4f6f8" stroke="#c8d0d8" stroke-width="1.5"/>
+  <text x="60" y="144" font-size="16.5" font-weight="600" fill="#1f2328">Source repository</text>
+  <text x="60" y="168" font-size="13" fill="#8250df">engineering-owned</text>
+  <text x="60" y="198" font-size="13.5" fill="#57606a">The product itself: extraction,</text>
+  <text x="60" y="218" font-size="13.5" fill="#57606a">rendering, validation, publishing,</text>
+  <text x="60" y="238" font-size="13.5" fill="#57606a">and the Q&amp;A tool server.</text>
+  <text x="60" y="268" font-size="13.5" fill="#1f2328">Where development and code</text>
+  <text x="60" y="286" font-size="13.5" fill="#1f2328">review happen.</text>
+
+  <line x1="330" y1="202" x2="424" y2="202" stroke="#57606a" stroke-width="1.8" marker-end="url(#d)"/>
+  <text x="336" y="192" font-size="12.5" fill="#57606a">released as a</text>
+  <text x="336" y="228" font-size="12.5" fill="#57606a">versioned bundle</text>
+
+  <!-- Registry -->
+  <rect x="424" y="112" width="290" height="180" rx="10" fill="#ddf4ff" stroke="#1f6feb" stroke-width="1.8"/>
+  <text x="444" y="144" font-size="16.5" font-weight="600" fill="#1f2328">Skill registry</text>
+  <text x="444" y="168" font-size="13" fill="#8250df">private, organisation-wide</text>
+  <text x="444" y="198" font-size="13.5" fill="#57606a">The distributed artifact. What a</text>
+  <text x="444" y="218" font-size="13.5" fill="#57606a">developer actually installs into</text>
+  <text x="444" y="238" font-size="13.5" fill="#57606a">their editor.</text>
+  <text x="444" y="268" font-size="13.5" fill="#1f6feb">Ships its own Python runtime, so</text>
+  <text x="444" y="286" font-size="13.5" fill="#1f6feb">setup is one command.</text>
+
+  <line x1="714" y1="202" x2="808" y2="202" stroke="#57606a" stroke-width="1.8" marker-end="url(#d)"/>
+  <text x="720" y="192" font-size="12.5" fill="#57606a">installed once</text>
+  <text x="720" y="228" font-size="12.5" fill="#57606a">per machine</text>
+
+  <!-- Report repos -->
+  <rect x="808" y="112" width="212" height="180" rx="10" fill="#f6fdf8" stroke="#1a7f37" stroke-width="1.8"/>
+  <text x="828" y="144" font-size="16.5" font-weight="600" fill="#1f2328">Report repos</text>
+  <text x="828" y="168" font-size="13" fill="#8250df">BI-owned, many</text>
+  <text x="828" y="198" font-size="13.5" fill="#57606a">Report packages</text>
+  <text x="828" y="218" font-size="13.5" fill="#57606a">committed to Git.</text>
+  <text x="828" y="248" font-size="13.5" fill="#1a7f37">The agent runs here</text>
+  <text x="828" y="266" font-size="13.5" fill="#1a7f37">and opens its draft</text>
+  <text x="828" y="284" font-size="13.5" fill="#1a7f37">pull requests here.</text>
+
+  <!-- Consequence panel -->
+  <rect x="40" y="332" width="980" height="128" rx="10" fill="#faf5ff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="62" y="364" font-size="16" font-weight="600" fill="#8250df">The consequence that mattered operationally</text>
+  <text x="62" y="394" font-size="14" fill="#1f2328">Editing the source repository does not change what anyone's editor is running. An installed Skill is pinned to a</text>
+  <text x="62" y="416" font-size="14" fill="#1f2328">released bundle, so a fix only reaches the team when it is released and they update.</text>
+  <text x="62" y="444" font-size="14" fill="#57606a">This is also what made repository cleanup safe: deleting retired files from the source could not break an existing install.</text>
+
+  <!-- Install scoping -->
+  <rect x="40" y="484" width="484" height="104" rx="10" fill="#ffffff" stroke="#c8d0d8" stroke-width="1.5"/>
+  <text x="62" y="514" font-size="15" font-weight="600" fill="#1f2328">Global install is per machine</text>
+  <text x="62" y="542" font-size="13.5" fill="#57606a">Not per repository. One install covers every local</text>
+  <text x="62" y="562" font-size="13.5" fill="#57606a">repository, which was the question I fielded most.</text>
+
+  <rect x="536" y="484" width="484" height="104" rx="10" fill="#ffffff" stroke="#c8d0d8" stroke-width="1.5"/>
+  <text x="558" y="514" font-size="15" font-weight="600" fill="#1f2328">Scoped deliberately</text>
+  <text x="558" y="542" font-size="13.5" fill="#57606a">Install only this one Skill, and only for the one editor,</text>
+  <text x="558" y="562" font-size="13.5" fill="#57606a">so nobody inherits unrelated tooling.</text>
+</svg>

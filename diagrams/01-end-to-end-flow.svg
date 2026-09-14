@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 800" width="1060" height="800" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#57606a"/>
+    </marker>
+  </defs>
+
+  <rect width="1060" height="800" fill="#ffffff"/>
+
+  <text x="40" y="48" font-size="26" font-weight="600" fill="#1f2328">One invocation, end to end</text>
+  <text x="40" y="76" font-size="15" fill="#57606a">The developer stays in the report repository. Everything below happens behind a single Skill invocation.</text>
+
+  <!-- Stage 1 -->
+  <rect x="40" y="104" width="430" height="66" rx="9" fill="#f4f6f8" stroke="#c8d0d8" stroke-width="1.5"/>
+  <text x="60" y="132" font-size="15.5" font-weight="600" fill="#1f2328">Skill invoked in the editor</text>
+  <text x="60" y="155" font-size="13" fill="#57606a">Inputs: repository, target branch, exact report name</text>
+  <text x="500" y="142" font-size="13.5" fill="#57606a">No pipeline, no job queue. The developer is present.</text>
+  <line x1="255" y1="170" x2="255" y2="194" stroke="#57606a" stroke-width="1.8" marker-end="url(#a)"/>
+
+  <!-- Stage 2 -->
+  <rect x="40" y="194" width="430" height="66" rx="9" fill="#f4f6f8" stroke="#c8d0d8" stroke-width="1.5"/>
+  <text x="60" y="222" font-size="15.5" font-weight="600" fill="#1f2328">discover</text>
+  <text x="60" y="245" font-size="13" fill="#57606a">Resolve exactly one report package</text>
+  <text x="500" y="232" font-size="13.5" fill="#cf222e">Zero or multiple matches is a hard stop, not a guess.</text>
+  <line x1="255" y1="260" x2="255" y2="284" stroke="#57606a" stroke-width="1.8" marker-end="url(#a)"/>
+
+  <!-- Stage 3 -->
+  <rect x="40" y="284" width="430" height="66" rx="9" fill="#f4f6f8" stroke="#c8d0d8" stroke-width="1.5"/>
+  <text x="60" y="312" font-size="15.5" font-weight="600" fill="#1f2328">prepare evidence</text>
+  <text x="60" y="335" font-size="13" fill="#57606a">Deterministic extraction, then a curated payload plus a hashed manifest</text>
+  <text x="500" y="322" font-size="13.5" fill="#57606a">Every fact carries provenance and a confidence level.</text>
+  <line x1="255" y1="350" x2="255" y2="374" stroke="#57606a" stroke-width="1.8" marker-end="url(#a)"/>
+
+  <!-- Stage 4 -->
+  <rect x="40" y="374" width="430" height="66" rx="9" fill="#faf5ff" stroke="#8250df" stroke-width="1.8"/>
+  <text x="60" y="402" font-size="15.5" font-weight="600" fill="#8250df">bounded reasoning step</text>
+  <text x="60" y="425" font-size="13" fill="#57606a">The editor's own model writes the business explanation</text>
+  <text x="500" y="402" font-size="13.5" fill="#8250df">The only stage a model touches.</text>
+  <text x="500" y="424" font-size="13.5" fill="#57606a">Reads the payload and manifest and nothing else.</text>
+  <line x1="255" y1="440" x2="255" y2="464" stroke="#57606a" stroke-width="1.8" marker-end="url(#a)"/>
+
+  <!-- Stage 5 -->
+  <rect x="40" y="464" width="430" height="66" rx="9" fill="#ddf4ff" stroke="#1f6feb" stroke-width="1.8"/>
+  <text x="60" y="492" font-size="15.5" font-weight="600" fill="#1f6feb">generate</text>
+  <text x="60" y="515" font-size="13" fill="#57606a">Render business and technical documents from the approved result</text>
+  <text x="500" y="492" font-size="13.5" fill="#1f6feb">Fully deterministic. No model involved.</text>
+  <text x="500" y="514" font-size="13.5" fill="#57606a">Same inputs always produce the same documents.</text>
+  <line x1="255" y1="530" x2="255" y2="554" stroke="#57606a" stroke-width="1.8" marker-end="url(#a)"/>
+
+  <!-- Stage 6 -->
+  <rect x="40" y="554" width="430" height="66" rx="9" fill="#f4f6f8" stroke="#c8d0d8" stroke-width="1.5"/>
+  <text x="60" y="582" font-size="15.5" font-weight="600" fill="#1f2328">validate</text>
+  <text x="60" y="605" font-size="13" fill="#57606a">Evidence checks, payload hash check, quality report</text>
+  <text x="500" y="592" font-size="13.5" fill="#57606a">A failure here stops the run before anything is written.</text>
+  <line x1="255" y1="620" x2="255" y2="644" stroke="#57606a" stroke-width="1.8" marker-end="url(#a)"/>
+
+  <!-- Stage 7 -->
+  <rect x="40" y="644" width="430" height="66" rx="9" fill="#f6fdf8" stroke="#1a7f37" stroke-width="1.8"/>
+  <text x="60" y="672" font-size="15.5" font-weight="600" fill="#1a7f37">publish</text>
+  <text x="60" y="695" font-size="13" fill="#57606a">Branch, commit, and open a draft pull request</text>
+  <text x="500" y="672" font-size="13.5" fill="#1a7f37">Draft only. Never merges, never publishes to the BI service.</text>
+  <text x="500" y="694" font-size="13.5" fill="#57606a">Uses the developer's own credentials and review process.</text>
+
+  <line x1="40" y1="740" x2="1020" y2="740" stroke="#e3e7eb" stroke-width="1.5"/>
+  <text x="40" y="770" font-size="13.5" fill="#57606a">Outputs: business Markdown and HTML for analysts; technical Markdown, PDF and CSV inventories for engineers;</text>
+  <text x="40" y="790" font-size="13.5" fill="#57606a">plus a self-contained HTML handoff file a report developer can embed on a Documentation page inside the report.</text>
+</svg>

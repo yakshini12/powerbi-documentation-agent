@@ -130,6 +130,9 @@ estate.
 
 ## The Q&A tool server
 
+> Covered in depth in **[`mcp.md`](mcp.md)**, including the full tool list and the
+> configuration problems worth knowing about.
+
 A 3,000-line technical document is a reference, not an answer. So the same evidence model
 is exposed to the editor as a read-only tool server over stdio, with narrow tools —
 report structure, report/page/visual filters, slicer state, measure dependencies,

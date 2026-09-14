@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 700" width="1060" height="700" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a7f37"/>
+    </marker>
+  </defs>
+
+  <rect width="1060" height="700" fill="#ffffff"/>
+
+  <text x="40" y="48" font-size="26" font-weight="600" fill="#1f2328">The information boundary</text>
+  <text x="40" y="76" font-size="15" fill="#57606a">A model handed a whole report package will invent confident definitions for metrics it knows nothing about.</text>
+  <text x="40" y="98" font-size="15" fill="#57606a">So the design decides what it may not see, and makes everything else deterministic.</text>
+
+  <!-- Allowed inputs -->
+  <rect x="40" y="136" width="300" height="150" rx="10" fill="#f6fdf8" stroke="#1a7f37" stroke-width="1.8"/>
+  <text x="60" y="166" font-size="15.5" font-weight="600" fill="#1a7f37">May read</text>
+  <text x="60" y="196" font-size="13.5" fill="#1f2328">explain-payload.json</text>
+  <text x="60" y="216" font-size="12.5" fill="#57606a">a curated selection of evidence</text>
+  <text x="60" y="244" font-size="13.5" fill="#1f2328">manifest.json</text>
+  <text x="60" y="264" font-size="12.5" fill="#57606a">identifies the report, carries the payload hash</text>
+
+  <line x1="340" y1="211" x2="418" y2="211" stroke="#1a7f37" stroke-width="2" marker-end="url(#ok)"/>
+
+  <!-- Reasoning -->
+  <rect x="418" y="136" width="270" height="150" rx="10" fill="#faf5ff" stroke="#8250df" stroke-width="1.8"/>
+  <text x="438" y="166" font-size="15.5" font-weight="600" fill="#8250df">Reasoning step</text>
+  <text x="438" y="194" font-size="13" fill="#57606a">The editor's own model.</text>
+  <text x="438" y="216" font-size="13" fill="#57606a">No external API, no personal key.</text>
+  <text x="438" y="246" font-size="13" fill="#1f2328">Prose is its job.</text>
+  <text x="438" y="266" font-size="13" fill="#1f2328">Facts are extraction's job.</text>
+
+  <line x1="688" y1="211" x2="766" y2="211" stroke="#1a7f37" stroke-width="2" marker-end="url(#ok)"/>
+
+  <!-- Result + hash gate -->
+  <rect x="766" y="136" width="254" height="150" rx="10" fill="#ddf4ff" stroke="#1f6feb" stroke-width="1.8"/>
+  <text x="786" y="166" font-size="15.5" font-weight="600" fill="#1f6feb">explain-result.json</text>
+  <text x="786" y="194" font-size="13" fill="#57606a">Fixed contract, cited refs.</text>
+  <text x="786" y="224" font-size="13.5" font-weight="600" fill="#1f2328">Payload hash re-verified</text>
+  <text x="786" y="244" font-size="12.5" fill="#57606a">A response authored against a</text>
+  <text x="786" y="262" font-size="12.5" fill="#57606a">different payload is rejected.</text>
+
+  <!-- Blocked -->
+  <rect x="40" y="326" width="980" height="180" rx="10" fill="#fff5f5" stroke="#cf222e" stroke-width="1.8"/>
+  <text x="62" y="358" font-size="16" font-weight="600" fill="#cf222e">May not read, during business explanation</text>
+  <text x="62" y="392" font-size="13.5" fill="#1f2328">the raw report package</text>
+  <text x="62" y="416" font-size="13.5" fill="#1f2328">report or semantic model source files</text>
+  <text x="62" y="440" font-size="13.5" fill="#1f2328">the extracted evidence JSON</text>
+  <text x="62" y="464" font-size="13.5" fill="#1f2328">technical CSV, Markdown, HTML or PDF output</text>
+  <text x="540" y="392" font-size="13.5" fill="#1f2328">previously generated business documents</text>
+  <text x="540" y="416" font-size="13.5" fill="#1f2328">the product's own source code</text>
+  <text x="540" y="440" font-size="13.5" fill="#1f2328">arbitrary or unrelated repository files</text>
+  <text x="540" y="464" font-size="13.5" fill="#1f2328">the Q&amp;A tool server, or any other tool server</text>
+  <text x="62" y="492" font-size="13.5" font-style="italic" fill="#cf222e">If a fact is not in the payload, it stays out. Preserve the ambiguity rather than resolving it.</text>
+
+  <!-- Three classes -->
+  <text x="40" y="552" font-size="16" font-weight="600" fill="#1f2328">Every statement is classified while reasoning</text>
+  <rect x="40" y="572" width="312" height="94" rx="10" fill="#ffffff" stroke="#1a7f37" stroke-width="1.5"/>
+  <text x="60" y="600" font-size="14.5" font-weight="600" fill="#1a7f37">Fact</text>
+  <text x="60" y="626" font-size="13" fill="#57606a">Directly present in the payload.</text>
+  <text x="60" y="648" font-size="13" fill="#57606a">Stated with exact references.</text>
+
+  <rect x="374" y="572" width="312" height="94" rx="10" fill="#ffffff" stroke="#8250df" stroke-width="1.5"/>
+  <text x="394" y="600" font-size="14.5" font-weight="600" fill="#8250df">Inference</text>
+  <text x="394" y="626" font-size="13" fill="#57606a">Supported by payload relationships.</text>
+  <text x="394" y="648" font-size="13" fill="#57606a">Qualified, with all refs cited.</text>
+
+  <rect x="708" y="572" width="312" height="94" rx="10" fill="#ffffff" stroke="#cf222e" stroke-width="1.5"/>
+  <text x="728" y="600" font-size="14.5" font-weight="600" fill="#cf222e">Unknown</text>
+  <text x="728" y="626" font-size="13" fill="#57606a">Absent, null, ambiguous, or a</text>
+  <text x="728" y="648" font-size="13" fill="#57606a">known gap. Left unfilled.</text>
+</svg>

@@ -63,38 +63,47 @@ Branch:     main
 Report:     <exact report name>
 ```
 
-Behind that single invocation:
+Everything below happens behind that one invocation:
 
-```
-Skill invocation
-      │
-      ▼
-discover ........... resolve the one matching report package (fail on 0 or many)
-      │
-      ▼
-prepare evidence ... deterministic extraction → explain payload + manifest (hashed)
-      │
-      ▼
-reasoning step ..... editor's own model authors the business explanation, bounded
-      │               strictly to the payload; result written back as JSON
-      ▼
-generate ........... fully deterministic render using the approved JSON
-      │
-      ▼
-validate ........... evidence checks, payload hash check, quality report
-      │
-      ▼
-publish ............ branch + commit + draft PR on the target repository
-```
+![End-to-end flow from Skill invocation to draft pull request](diagrams/01-end-to-end-flow.svg)
 
 The reasoning step runs on the model the developer already has configured in their
 editor. There is no external model API and no personal API key anywhere in the flow —
 which is what made the whole thing approvable from a data-handling standpoint.
 
+## The information boundary
+
+The single most important design decision: decide what the model may *not* see, and make
+everything else deterministic.
+
+![What the reasoning step may and may not read](diagrams/04-information-boundary.svg)
+
+Once the explanation JSON exists and its payload hash verifies, generation involves no
+model at all. The same inputs always produce the same documents.
+
+## How it's distributed
+
+Three repositories, three completely different jobs. Getting this clear in people's heads
+was half the support burden — and it's also why cleaning up the source repository was
+safe to do.
+
+![The source repository, the Skill registry, and the report repositories](diagrams/02-distribution-model.svg)
+
+## Technical Q&A over MCP
+
+A thousand-line technical document is a reference, not an answer. So the same evidence is
+exposed to the editor as narrow, read-only tools an engineer can simply ask — "which
+filters apply on this page", "is this measure used anywhere", "what breaks if I change
+this table".
+
+**[Read the full write-up in `mcp.md`](mcp.md)** — the tool design, why the tools are
+narrow rather than one catch-all, the safety rules including why the one mutating tool
+can never be auto-invoked, and the cross-platform configuration problems I debugged.
+
 ## Architecture
 
-See [`architecture.md`](architecture.md) for the component breakdown, the separation
-between the source repository and the distributed Skill, and the trust boundaries.
+See [`architecture.md`](architecture.md) for the component breakdown, the pipeline
+stages, and the full trust-boundary table.
 
 ## Integrations I worked through
 
@@ -114,9 +123,11 @@ onboarding, and retiring a CI pipeline that everyone assumed was load-bearing.
 - **The technical documentation surface.** Pages, visuals, filters, slicers, measure
   dependencies, usage, impact analysis, and lineage — including being explicit about
   confidence and about gaps, rather than presenting inferred lineage as confirmed.
-- **The Q&A integration.** A read-only tool server exposed to the editor so engineers
-  could ask targeted questions about a report instead of reading a 3,000-line technical
-  document.
+- **The Q&A integration (MCP).** Designed and shipped the read-only tool server that
+  exposes the evidence model to the editor, so engineers ask targeted questions instead
+  of reading a 3,000-line technical document — including the tool decomposition, the
+  bounded-lineage defaults, the human-approval gate on the one mutating operation, and
+  the cross-platform configuration. Written up in [`mcp.md`](mcp.md).
 - **Team enablement.** Wrote the cross-platform setup guide, ran the onboarding session,
   and debugged the first wave of real installs on both macOS and Windows.
 - **Repository hygiene.** Audited the repository, identified the retired CI pipeline,
